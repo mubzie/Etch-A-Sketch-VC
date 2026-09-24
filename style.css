@@ -1,0 +1,426 @@
+/* ─── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Root & Typography ────────────────────────────────────── */
+:root {
+  --bg-base:       #0d0d0f;
+  --bg-surface:    #141416;
+  --bg-raised:     #1c1c20;
+  --bg-hover:      #222228;
+
+  --border-dim:    #2a2a2e;
+  --border-mid:    #3a3a42;
+  --border-accent: #5a5aff;
+
+  --text-primary:  #f0ede6;
+  --text-secondary:#888;
+  --text-muted:    #555;
+
+  --accent:        #5a5aff;
+  --accent-soft:   #8080ff;
+  --accent-bg:     #1e1e2e;
+
+  --green:         #44ff88;
+  --red:           #ff4444;
+  --red-soft:      #ff6666;
+
+  --radius-sm:     6px;
+  --radius-md:     8px;
+  --radius-lg:     10px;
+
+  --font-mono:     'DM Mono', monospace;
+  --font-display:  'Syne', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── App Shell ────────────────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 16px;
+}
+
+/* ─── Header ───────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.header-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* ─── Workspace ────────────────────────────────────────────── */
+.workspace {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  align-items: start;
+  flex: 1;
+}
+
+/* ─── Sidebar ──────────────────────────────────────────────── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─── Panels ───────────────────────────────────────────────── */
+.panel {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+
+.panel-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* ─── Tool Buttons ─────────────────────────────────────────── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.tool-btn {
+  background: var(--bg-raised);
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 9px 6px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.tool-btn:hover {
+  background: var(--bg-hover);
+  color: #bbb;
+  border-color: var(--border-mid);
+}
+
+.tool-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-soft);
+}
+
+.tool-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* ─── Color Picker ─────────────────────────────────────────── */
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-row label {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+input[type="color"] {
+  width: 36px;
+  height: 26px;
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+/* ─── Grid Size Slider ─────────────────────────────────────── */
+.grid-size-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.grid-size-row span {
+  font-size: 11px;
+  color: #aaa;
+  min-width: 40px;
+  text-align: right;
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+  height: 3px;
+  cursor: pointer;
+}
+
+/* ─── Action Buttons ───────────────────────────────────────── */
+.actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.action-btn {
+  background: var(--bg-raised);
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  letter-spacing: 1px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  width: 100%;
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+}
+
+.action-btn.save:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.action-btn.danger:hover {
+  border-color: var(--red);
+  color: var(--red-soft);
+}
+
+/* ─── Main Area ────────────────────────────────────────────── */
+.main-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Canvas Wrapper ───────────────────────────────────────── */
+.canvas-wrap {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Pixel Canvas ─────────────────────────────────────────── */
+#pixel-canvas {
+  display: grid;
+  border: 0.5px solid #222;
+  border-radius: 4px;
+  cursor: crosshair;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  user-select: none;
+  background: #0a0a0c;
+}
+
+.pixel {
+  border: 0.5px solid transparent;
+  transition: background-color 0.04s;
+}
+
+.show-grid .pixel {
+  border-color: #1a1a1e;
+}
+
+/* ─── Canvas Footer ────────────────────────────────────────── */
+.canvas-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.mode-indicator {
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+/* ─── NFT Section ──────────────────────────────────────────── */
+.nft-section {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+
+.nft-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.refresh-btn {
+  background: none;
+  border: 0.5px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.refresh-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-soft);
+}
+
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+/* ─── NFT Card ─────────────────────────────────────────────── */
+.nft-card {
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  background: var(--bg-base);
+}
+
+.nft-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+}
+
+.nft-card.selected {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.nft-preview {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+.nft-meta {
+  padding: 7px 9px 8px;
+}
+
+.nft-name {
+  font-size: 9px;
+  color: #777;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nft-tag {
+  font-size: 8px;
+  color: #444;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Footer ───────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  padding-top: 4px;
+}
+
+/* ─── Keyboard shortcut hint ───────────────────────────────── */
+.shortcut-hint {
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ─── Responsive ───────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .actions-panel {
+    grid-column: span 2;
+    flex-direction: row;
+  }
+
+  .nft-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

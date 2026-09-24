@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etch·A·Sketch Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Etch·A·Sketch</h1>
+        <span class="header-sub">studio</span>
+      </header>
+
+      <div class="workspace">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+          <div class="panel">
+            <p class="panel-label">Tools</p>
+            <div class="tools-grid">
+              <button class="tool-btn active" data-mode="draw" title="Draw (D)">
+                <span class="tool-icon">✏</span>
+                <span>draw</span>
+              </button>
+              <button class="tool-btn" data-mode="erase" title="Erase (E)">
+                <span class="tool-icon">◻</span>
+                <span>erase</span>
+              </button>
+              <button class="tool-btn" data-mode="fill" title="Fill bucket (F)">
+                <span class="tool-icon">◈</span>
+                <span>fill</span>
+              </button>
+              <button class="tool-btn" data-mode="rainbow" title="Rainbow (R)">
+                <span class="tool-icon">◉</span>
+                <span>rainbow</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <p class="panel-label">Color</p>
+            <div class="color-row">
+              <label for="color-pick">Primary</label>
+              <input type="color" id="color-pick" value="#5a5aff" />
+            </div>
+          </div>
+
+          <div class="panel">
+            <p class="panel-label">Grid size</p>
+            <div class="grid-size-row">
+              <input type="range" id="grid-size" min="8" max="48" value="16" step="4" />
+              <span id="grid-label">16×16</span>
+            </div>
+          </div>
+
+          <div class="panel actions-panel">
+            <button class="action-btn save" id="save-btn">↓ download png</button>
+            <button class="action-btn danger" id="clear-btn">✕ clear canvas</button>
+          </div>
+
+        </aside>
+
+        <!-- Main canvas area -->
+        <main class="main-area">
+          <div class="canvas-wrap">
+            <div id="pixel-canvas" class="show-grid"></div>
+            <div class="canvas-footer">
+              <label class="grid-toggle">
+                <input type="checkbox" id="grid-toggle" checked />
+                show grid
+              </label>
+              <span class="mode-indicator" id="mode-label">● draw</span>
+            </div>
+          </div>
+
+          <!-- NFT Gallery -->
+          <section class="nft-section">
+            <div class="nft-header">
+              <span class="panel-label" style="margin-bottom:0">Pixel NFT gallery</span>
+              <button class="refresh-btn" id="refresh-btn">↻ refresh</button>
+            </div>
+            <div class="nft-grid" id="nft-grid"></div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <p>copyright &copy; <span id="year"></span> mubzie</p>
+      </footer>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
