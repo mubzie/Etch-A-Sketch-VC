@@ -2,10 +2,12 @@
   "name": "etch-a-sketch-studio",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node test-import.mjs && node test-history.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

@@ -2,22 +2,35 @@
 
 import { useEffect, useRef } from "react";
 
-export function useCanvasPointerInteraction(onPaint) {
+export function useCanvasPointerInteraction(onPaint, onStrokeEnd) {
   const isPaintingRef = useRef(false);
+  const onPaintRef = useRef(onPaint);
+  const onStrokeEndRef = useRef(onStrokeEnd);
 
   useEffect(() => {
-    const endStroke = () => {
-      isPaintingRef.current = false;
+    onPaintRef.current = onPaint;
+  }, [onPaint]);
+
+  useEffect(() => {
+    onStrokeEndRef.current = onStrokeEnd;
+  }, [onStrokeEnd]);
+
+  useEffect(() => {
+    const finishStroke = () => {
+      if (isPaintingRef.current) {
+        isPaintingRef.current = false;
+        onStrokeEndRef.current?.();
+      }
     };
 
-    window.addEventListener("pointerup", endStroke);
-    window.addEventListener("pointercancel", endStroke);
-    window.addEventListener("blur", endStroke);
+    window.addEventListener("pointerup", finishStroke);
+    window.addEventListener("pointercancel", finishStroke);
+    window.addEventListener("blur", finishStroke);
 
     return () => {
-      window.removeEventListener("pointerup", endStroke);
-      window.removeEventListener("pointercancel", endStroke);
-      window.removeEventListener("blur", endStroke);
+      window.removeEventListener("pointerup", finishStroke);
+      window.removeEventListener("pointercancel", finishStroke);
+      window.removeEventListener("blur", finishStroke);
     };
   }, []);
 
@@ -25,17 +38,28 @@ export function useCanvasPointerInteraction(onPaint) {
     event.preventDefault();
 
     if (isFillMode) {
-      onPaint(index);
+      onPaintRef.current?.(index);
       return;
     }
 
+    // Release pointer capture on touch devices so dragging across cells triggers pointerenter on siblings
+    if (
+      event.target &&
+      typeof event.target.releasePointerCapture === "function" &&
+      event.pointerId !== undefined
+    ) {
+      try {
+        event.target.releasePointerCapture(event.pointerId);
+      } catch (_) {}
+    }
+
     isPaintingRef.current = true;
-    onPaint(index);
+    onPaintRef.current?.(index);
   };
 
   const continueStroke = (index) => {
     if (isPaintingRef.current) {
-      onPaint(index);
+      onPaintRef.current?.(index);
     }
   };
 
@@ -43,7 +67,10 @@ export function useCanvasPointerInteraction(onPaint) {
     startStroke,
     continueStroke,
     endStroke: () => {
-      isPaintingRef.current = false;
+      if (isPaintingRef.current) {
+        isPaintingRef.current = false;
+        onStrokeEndRef.current?.();
+      }
     },
   };
 }

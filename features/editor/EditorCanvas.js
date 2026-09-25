@@ -12,7 +12,18 @@ const Pixel = memo(function Pixel({ color, index, onDown, onEnter }) {
     <div
       className="pixel"
       style={{ backgroundColor: color }}
-      onPointerDown={(event) => onDown(index, event)}
+      onPointerDown={(event) => {
+        if (
+          event.target &&
+          typeof event.target.releasePointerCapture === "function" &&
+          event.pointerId !== undefined
+        ) {
+          try {
+            event.target.releasePointerCapture(event.pointerId);
+          } catch (_) {}
+        }
+        onDown(index, event);
+      }}
       onPointerEnter={() => onEnter(index)}
     />
   );

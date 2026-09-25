@@ -6,8 +6,12 @@ import {
   shouldIgnoreShortcut,
 } from "../../lib/editor/keyboardShortcuts";
 
-export function useEditorShortcuts(onModeChange) {
+export function useEditorShortcuts(onModeChange, enabled = true) {
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const handleKeyDown = (event) => {
       if (shouldIgnoreShortcut(event.target)) {
         return;
@@ -21,5 +25,5 @@ export function useEditorShortcuts(onModeChange) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onModeChange]);
+  }, [onModeChange, enabled]);
 }

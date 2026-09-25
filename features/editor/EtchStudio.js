@@ -177,11 +177,15 @@ export default function EtchStudio() {
     }
   };
 
+  const commitStroke = () => {
+    endStroke(pixelsRef.current);
+  };
+
   const {
     startStroke,
     continueStroke,
     endStroke: endPointerStroke,
-  } = useCanvasPointerInteraction(paintAtIndex);
+  } = useCanvasPointerInteraction(paintAtIndex, commitStroke);
 
   const handleStrokeStart = (index, event) => {
     const mm = modeRef.current;
@@ -203,16 +207,20 @@ export default function EtchStudio() {
 
   const handleStrokeEnd = () => {
     endPointerStroke();
-    endStroke(pixelsRef.current);
   };
 
   /* ── Keyboard ─────────────────────────────────────────────── */
 
-  useEditorShortcuts(setMode);
+  const isModalOpen = galleryOpen || importOpen || confirmClear;
+
+  useEditorShortcuts(setMode, !isModalOpen);
 
   // Undo / redo keyboard handling.
   useEffect(() => {
     const onKeyDown = (e) => {
+      if (isModalOpen) {
+        return;
+      }
       if (e.target && e.target.tagName) {
         const tag = e.target.tagName;
         if (["INPUT", "TEXTAREA", "SELECT"].includes(tag)) {
@@ -238,15 +246,27 @@ export default function EtchStudio() {
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [undo, redo]);
+  }, [undo, redo, isModalOpen]);
 
   /* ── Actions ──────────────────────────────────────────────── */
 
+  const toastTimerRef = useRef(null);
+
   const showToast = (message) => {
     setToast(message);
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => setToast(null), 2200);
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = setTimeout(() => setToast(null), 2200);
   };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
 
   const clearCanvas = () => {
     replace(createFilledPixels(gridSizeRef.current));
